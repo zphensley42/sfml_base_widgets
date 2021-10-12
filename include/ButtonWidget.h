@@ -1,0 +1,34 @@
+#ifndef SFML_BASE_WIDGETS_BUTTONWIDGET_H
+#define SFML_BASE_WIDGETS_BUTTONWIDGET_H
+
+#include "BaseWidget.h"
+#include <string>
+
+namespace sfml { namespace base {
+
+class ButtonWidget : public BaseWidget {
+public:
+    ButtonWidget();
+    ButtonWidget(const std::string &text);
+    ButtonWidget(const std::string &text, DrawStateColorMapping background, DrawStateColorMapping foreground);
+
+    void draw(sf::View* v, sf::RenderWindow &w) override;
+    void delegateEvent(sf::Event& event) override;
+    void setClickedListener(std::function<void()> listener);
+private:
+    void init();
+
+    sf::Text m_label;
+    sf::RectangleShape m_background;
+
+    // TODO: Make a class to represent this? (or a struct or something)
+    DrawStateColorMapping m_stateForegroundColors;
+    DrawStateColorMapping m_stateBackgroundColors;
+
+    std::function<void()> m_listener{nullptr};
+};
+
+}}
+
+
+#endif //SFML_BASE_WIDGETS_BUTTONWIDGET_H
