@@ -12,11 +12,16 @@ public:
     ButtonWidget(const std::string &text);
     ButtonWidget(const std::string &text, DrawStateColorMapping background, DrawStateColorMapping foreground);
 
+    float getHeight();
+    void setForegroundColors(DrawStateColorMapping foreground);
+    void setBackgroundColors(DrawStateColorMapping background);
+    void setText(const std::string &text);
     void draw(sf::View* v, sf::RenderWindow &w) override;
     void delegateEvent(sf::Event& event) override;
     void setClickedListener(std::function<void()> listener);
 private:
     void init();
+    void reposition();
 
     sf::Text m_label;
     sf::RectangleShape m_background;

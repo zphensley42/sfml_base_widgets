@@ -14,13 +14,34 @@ ButtonWidget::ButtonWidget(const std::string &text, DrawStateColorMapping backgr
     m_label.setCharacterSize(16);
 }
 
+float ButtonWidget::getHeight() {
+    return m_bounds.height;
+}
+
+void ButtonWidget::setForegroundColors(DrawStateColorMapping foreground) {
+    m_stateForegroundColors = foreground;
+}
+void ButtonWidget::setBackgroundColors(DrawStateColorMapping background) {
+    m_stateBackgroundColors = background;
+}
+
+void ButtonWidget::setText(const std::string &text) {
+    m_label.setString(text);
+    m_label.setCharacterSize(16);
+}
+
 void ButtonWidget::init() {
+    m_label.setFont(FontManager::instance().buttonFont());
     m_background.setSize({ m_bounds.width, m_bounds.height});
+
+    reposition();
+}
+
+// TODO: This again seems inefficient due to allocations
+void ButtonWidget::reposition() {
     m_background.setPosition({m_bounds.left, m_bounds.top});
 
-    m_label.setFont(FontManager::instance().buttonFont());
     auto center = m_background.getPosition() + (m_background.getSize() / 2.f);
-
     auto labelLb = m_label.getLocalBounds();
     m_label.setOrigin({labelLb.width / 2.f, labelLb.height / 2.f});
     m_label.setPosition(center);
@@ -38,6 +59,9 @@ void ButtonWidget::draw(sf::View* v, sf::RenderWindow &w) {
     // Assign appropriate colors
     m_background.setFillColor(m_stateBackgroundColors.forState(m_drawState));
     m_label.setFillColor(m_stateForegroundColors.forState(m_drawState));
+
+    reposition();
+
     w.draw(m_background);
     w.draw(m_label);
 }
