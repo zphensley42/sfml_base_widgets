@@ -19,6 +19,8 @@ public:
     void draw(sf::View* v, sf::RenderWindow &w) override;
     void delegateEvent(sf::Event& event) override;
     void setClickedListener(std::function<void()> listener);
+
+    virtual void onDrawStateChanged(DrawState oldState, DrawState newState) override;
 private:
     void init();
     void reposition();

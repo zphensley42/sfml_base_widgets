@@ -66,53 +66,17 @@ void ButtonWidget::draw(sf::View* v, sf::RenderWindow &w) {
     w.draw(m_label);
 }
 
-void ButtonWidget::delegateEvent(sf::Event &event) {
-    switch(event.type) {
-        case sf::Event::EventType::MouseButtonPressed: {
-            if(m_background.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                FocusManager::instance().focus(this);
-                m_drawState = DrawState::BW_DS_PRESSED;
-            }
-            break;
-        }
-        case sf::Event::EventType::MouseButtonReleased: {
-            if(FocusManager::instance().isFocused(this)) {
-                FocusManager::instance().clearFocus();
-
-                auto inBounds = m_background.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y);
-                // TODO: Take into account activated / disabled states instead of defaulting to NONE
-                m_drawState = inBounds ? DrawState::BW_DS_HOVERED : DrawState::BW_DS_NONE;
-
-                // If we are in bounds when we release, this was a full click
-                if(inBounds && m_listener) {
-                    m_listener();
-                }
-            }
-            break;
-        }
-        case sf::Event::EventType::MouseMoved: {
-            auto hasFocus = FocusManager::instance().hasFocusedWidget();
-            auto isFocused = FocusManager::instance().isFocused(this);
-
-            // If we have focus but this isn't the focused widget, do nothing
-            // If we have focus and are focused, we are in down state
-            // If we do not have focus, move to hover logic
-            // TODO: Take into account activated / disabled states instead of defaulting to NONE
-
-            if(hasFocus && isFocused) {
-                m_drawState = DrawState::BW_DS_PRESSED;
-            }
-            else if(hasFocus) {
-                m_drawState = DrawState::BW_DS_NONE;
-            }
-            else {
-                auto inBounds = m_background.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y);
-                m_drawState = inBounds ? DrawState::BW_DS_HOVERED : DrawState::BW_DS_NONE;
-            }
-            break;
+void ButtonWidget::onDrawStateChanged(DrawState oldState, DrawState newState) {
+    // Determine if we were 'clicked' (i.e. pressed and released within the bounds)
+    if(oldState == DrawState::BW_DS_PRESSED && newState == DrawState::BW_DS_HOVERED) {
+        if(m_listener) {
+            m_listener();
         }
     }
-    // TODO: Fill-in
+}
+
+void ButtonWidget::delegateEvent(sf::Event &event) {
+    BaseWidget::delegateEvent(event);   // Nothing to add currently
 }
 
 void ButtonWidget::setClickedListener(std::function<void()> listener) {

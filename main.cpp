@@ -48,7 +48,7 @@ int main() {
             }
             else {
                 // Delegate (Focused widget first, other widgets if none)
-                if(!sfml::base::FocusManager::instance().delegateEventToFocusedWidget(event)) {
+                if(!sfml::base::FocusManager::instance().delegateEventToNecessaryWidgets(event)) {
                     for(auto& widget : widgets) {
                         widget->delegateEvent(event);
                     }
