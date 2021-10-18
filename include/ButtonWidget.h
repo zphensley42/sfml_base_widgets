@@ -17,8 +17,10 @@ public:
     void setBackgroundColors(DrawStateColorMapping background);
     void setText(const std::string &text);
     void draw(sf::View* v, sf::RenderWindow &w) override;
-    void delegateEvent(sf::Event& event) override;
+    bool delegateEvent(sf::RenderWindow& window, sf::Event& event) override;
     void setClickedListener(std::function<void()> listener);
+
+    virtual sf::FloatRect globalBounds() override;
 
     virtual void onDrawStateChanged(DrawState oldState, DrawState newState) override;
 private:

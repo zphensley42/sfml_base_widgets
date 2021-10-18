@@ -1,6 +1,12 @@
+#include <iostream>
 #include "BaseWidget.h"
 
 namespace sfml { namespace base {
+
+void BaseWidget::addChild(BaseWidget *child) {
+    m_children.push_back(child);
+    child->m_parent = this;
+}
 
 void BaseWidget::setSize(sf::Vector2f size) {
     m_bounds.width = size.x;
@@ -12,7 +18,7 @@ void BaseWidget::setPosition(sf::Vector2f position) {
     m_bounds.top = position.y;
 }
 
-sf::FloatRect& BaseWidget::globalBounds() {
+sf::FloatRect BaseWidget::globalBounds() {
     return m_bounds;
 }
 
@@ -22,7 +28,7 @@ void BaseWidget::updateState(BaseWidget::DrawState state) {
     onDrawStateChanged(oldState, state);
 }
 
-void BaseWidget::delegateEvent(sf::Event &event) {
+bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
     switch(event.type) {
         case sf::Event::EventType::MouseButtonPressed: {
             // Left click for focus states
@@ -36,6 +42,8 @@ void BaseWidget::delegateEvent(sf::Event &event) {
                             false,
                             false
                     );
+
+                    return true;
                 }
             }
             break;
@@ -45,8 +53,6 @@ void BaseWidget::delegateEvent(sf::Event &event) {
             if(event.mouseButton.button == 0) {
                 if(FocusManager::instance().isPressed(this)) {
                     FocusManager::instance().clearPressed();
-
-                    auto inBounds = globalBounds().contains(event.mouseButton.x, event.mouseButton.y);
 
                     determineState(
                             FocusManager::instance().isHovered(this),
@@ -59,13 +65,16 @@ void BaseWidget::delegateEvent(sf::Event &event) {
             break;
         }
         case sf::Event::EventType::MouseMoved: {
-            auto inBounds = globalBounds().contains(event.mouseMove.x, event.mouseMove.y);
+            auto mPos = window.mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
+            auto gB = globalBounds();
+            auto inBounds = gB.contains(mPos.x, mPos.y);
             if(inBounds) {
                 FocusManager::instance().hover(this);
             }
             else {
-                if(FocusManager::instance().isHovered(this)) {}
-                FocusManager::instance().clearHovered();
+                if(FocusManager::instance().isHovered(this)) {
+                    FocusManager::instance().clearHovered();
+                }
             }
 
             determineState(
@@ -77,6 +86,8 @@ void BaseWidget::delegateEvent(sf::Event &event) {
             break;
         }
     }
+
+    return false;
 }
 
 void BaseWidget::determineState(bool hovered, bool pressed, bool activated, bool disabled) {
@@ -99,16 +110,17 @@ FocusManager& FocusManager::instance() {
 }
 
 bool FocusManager::delegateEventToNecessaryWidgets(sf::Event &event) {
-    bool ret {false};
-    if(hasPressedWidget()) {
-        m_pressed->delegateEvent(event);
-        ret = true;
-    }
-
-    if(hasHoveredWidget()) {
-        m_hovered->delegateEvent(event);
-        ret = true;
-    }
+//    if(hasPressedWidget()) {
+//        if(m_pressed->delegateEvent(event)) {
+//            return true;
+//        }
+//    }
+//
+//    if(hasHoveredWidget()) {
+//        if(m_hovered->delegateEvent(event)) {
+//            return true;
+//        }
+//    }
     return false;
 }
 

@@ -24,7 +24,11 @@ public:
     // TODO: but specifically to this view).
     // TODO: Ideas: Callback into parent (requires parent to know / handle it); Call into manager held in library (no need for external visibility other than manager's interface,
     // TODO: which should generally not be needed); Other?
-    virtual void delegateEvent(sf::Event &event);
+
+    // TODO: Event delegation needs to work from parent -> child
+    // TODO: If a child 'handles' an event, the parent should not
+    // TODO: Some logic of the base needs to happen no matter what (i.e. buttons need to always handle their drawstate logic even if the event isn't necessarily handled by them?)
+    virtual bool delegateEvent(sf::RenderWindow& window, sf::Event &event);
 
     virtual void onDrawStateChanged(DrawState oldState, DrawState newState) {}
 
@@ -32,12 +36,16 @@ public:
         return m_bounds;
     }
 
-    virtual sf::FloatRect& globalBounds();
+    virtual sf::FloatRect globalBounds();
+
+    void addChild(BaseWidget* child);
 
     virtual void draw(sf::View* v, sf::RenderWindow &w) {}
 protected:
     DrawState m_drawState{BW_DS_NONE};
     sf::FloatRect m_bounds;
+    BaseWidget* m_parent;
+    std::vector<BaseWidget*> m_children;
 
     bool m_drawn{false};
 

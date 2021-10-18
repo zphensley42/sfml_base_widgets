@@ -75,12 +75,16 @@ void ButtonWidget::onDrawStateChanged(DrawState oldState, DrawState newState) {
     }
 }
 
-void ButtonWidget::delegateEvent(sf::Event &event) {
-    BaseWidget::delegateEvent(event);   // Nothing to add currently
+bool ButtonWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
+    return BaseWidget::delegateEvent(window, event);   // Nothing to add currently
 }
 
 void ButtonWidget::setClickedListener(std::function<void()> listener) {
     m_listener = listener;
+}
+
+sf::FloatRect ButtonWidget::globalBounds() {
+    return m_background.getGlobalBounds();
 }
 
 }}
