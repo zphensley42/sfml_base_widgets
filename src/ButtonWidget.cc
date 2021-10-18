@@ -30,6 +30,10 @@ void ButtonWidget::setText(const std::string &text) {
     m_label.setCharacterSize(16);
 }
 
+std::string ButtonWidget::getText() {
+    return m_label.getString();
+}
+
 void ButtonWidget::init() {
     m_label.setFont(FontManager::instance().buttonFont());
     m_background.setSize({ m_bounds.width, m_bounds.height});

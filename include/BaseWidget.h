@@ -20,21 +20,10 @@ public:
     virtual void setSize(sf::Vector2f size);
     virtual void setPosition(sf::Vector2f position);
 
-    // TODO: Need to determine how to handle notifying this is the focused view now for when we click into this view (so that we can handle things like dragging / mouse up
-    // TODO: but specifically to this view).
-    // TODO: Ideas: Callback into parent (requires parent to know / handle it); Call into manager held in library (no need for external visibility other than manager's interface,
-    // TODO: which should generally not be needed); Other?
-
-    // TODO: Event delegation needs to work from parent -> child
-    // TODO: If a child 'handles' an event, the parent should not
-    // TODO: Some logic of the base needs to happen no matter what (i.e. buttons need to always handle their drawstate logic even if the event isn't necessarily handled by them?)
+    // TODO: Some weirdness with clicks not hitting sometimes
     virtual bool delegateEvent(sf::RenderWindow& window, sf::Event &event);
 
     virtual void onDrawStateChanged(DrawState oldState, DrawState newState) {}
-
-    inline sf::FloatRect& bounds() {
-        return m_bounds;
-    }
 
     virtual sf::FloatRect globalBounds();
 

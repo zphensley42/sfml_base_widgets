@@ -16,6 +16,7 @@ public:
     void setForegroundColors(DrawStateColorMapping foreground);
     void setBackgroundColors(DrawStateColorMapping background);
     void setText(const std::string &text);
+    std::string getText();
     void draw(sf::View* v, sf::RenderWindow &w) override;
     bool delegateEvent(sf::RenderWindow& window, sf::Event& event) override;
     void setClickedListener(std::function<void()> listener);
