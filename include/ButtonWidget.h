@@ -21,6 +21,10 @@ public:
     bool delegateEvent(sf::RenderWindow& window, sf::Event& event) override;
     void setClickedListener(std::function<void()> listener);
 
+    virtual void setSize(sf::Vector2f size) override;
+
+    void setTextAlign(TextAlign align);
+
     virtual sf::FloatRect globalBounds() override;
 
     virtual void onDrawStateChanged(DrawState oldState, DrawState newState) override;
@@ -36,6 +40,8 @@ private:
     DrawStateColorMapping m_stateBackgroundColors;
 
     std::function<void()> m_listener{nullptr};
+
+    TextAlign m_textAlign{ALIGN_CENTER};
 };
 
 }}

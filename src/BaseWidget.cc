@@ -29,11 +29,16 @@ void BaseWidget::updateState(BaseWidget::DrawState state) {
 }
 
 bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
+    auto p = sf::Mouse::getPosition(window);
+    auto mousePos = window.mapPixelToCoords({p.x, p.y});
+    auto gb = globalBounds();
+
     switch(event.type) {
         case sf::Event::EventType::MouseButtonPressed: {
             // Left click for focus states
             if(event.mouseButton.button == 0) {
-                if(globalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                if(gb.contains(mousePos.x, mousePos.y)) {
+
                     FocusManager::instance().press(this);
 
                     determineState(
@@ -65,9 +70,7 @@ bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
             break;
         }
         case sf::Event::EventType::MouseMoved: {
-            auto mPos = window.mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
-            auto gB = globalBounds();
-            auto inBounds = gB.contains(mPos.x, mPos.y);
+            auto inBounds = gb.contains(mousePos.x, mousePos.y);
             if(inBounds) {
                 FocusManager::instance().hover(this);
             }

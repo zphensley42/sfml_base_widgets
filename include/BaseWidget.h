@@ -7,6 +7,12 @@ namespace sfml { namespace base {
 
 class BaseWidget {
 public:
+    enum TextAlign {
+        ALIGN_LEFT = 0,
+        ALIGN_CENTER,
+        ALIGN_RIGHT,
+    };
+
     enum DrawState {
         BW_DS_NONE = 0,
         BW_DS_HOVERED,
@@ -20,7 +26,6 @@ public:
     virtual void setSize(sf::Vector2f size);
     virtual void setPosition(sf::Vector2f position);
 
-    // TODO: Some weirdness with clicks not hitting sometimes
     virtual bool delegateEvent(sf::RenderWindow& window, sf::Event &event);
 
     virtual void onDrawStateChanged(DrawState oldState, DrawState newState) {}

@@ -44,11 +44,26 @@ void ButtonWidget::init() {
 // TODO: This again seems inefficient due to allocations
 void ButtonWidget::reposition() {
     m_background.setPosition({m_bounds.left, m_bounds.top});
-
     auto center = m_background.getPosition() + (m_background.getSize() / 2.f);
     auto labelLb = m_label.getLocalBounds();
-    m_label.setOrigin({labelLb.width / 2.f, labelLb.height / 2.f});
-    m_label.setPosition(center);
+
+    switch(m_textAlign) {
+        case BaseWidget::ALIGN_LEFT: {
+            m_label.setOrigin(0, labelLb.height / 2.f);
+            m_label.setPosition(m_background.getPosition().x, center.y);
+            break;
+        }
+        case BaseWidget::ALIGN_CENTER: {
+            m_label.setOrigin({labelLb.width / 2.f, labelLb.height / 2.f});
+            m_label.setPosition(center);
+            break;
+        }
+        case BaseWidget::ALIGN_RIGHT: {
+            m_label.setOrigin({labelLb.width, labelLb.height / 2.f});
+            m_label.setPosition(m_background.getPosition().x - labelLb.width, center.y);
+            break;
+        }
+    }
 }
 
 void ButtonWidget::draw(sf::View* v, sf::RenderWindow &w) {
@@ -87,8 +102,20 @@ void ButtonWidget::setClickedListener(std::function<void()> listener) {
     m_listener = listener;
 }
 
+void ButtonWidget::setTextAlign(TextAlign align) {
+    m_textAlign = align;
+    reposition();
+}
+
 sf::FloatRect ButtonWidget::globalBounds() {
     return m_background.getGlobalBounds();
+}
+
+void ButtonWidget::setSize(sf::Vector2f size) {
+    BaseWidget::setSize(size);
+
+    m_drawn = false;
+    reposition();
 }
 
 }}
