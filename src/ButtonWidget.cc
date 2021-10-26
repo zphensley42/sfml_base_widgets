@@ -94,8 +94,8 @@ void ButtonWidget::onDrawStateChanged(DrawState oldState, DrawState newState) {
     }
 }
 
-bool ButtonWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
-    return BaseWidget::delegateEvent(window, event);   // Nothing to add currently
+bool ButtonWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event, sf::View* view) {
+    return BaseWidget::delegateEvent(window, event, view);   // Nothing to add currently
 }
 
 void ButtonWidget::setClickedListener(std::function<void()> listener) {

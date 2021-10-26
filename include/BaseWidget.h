@@ -21,14 +21,16 @@ public:
         BW_DS_DISABLED,
     };
     BaseWidget() = default;
-    virtual ~BaseWidget() = default;
+    virtual ~BaseWidget();
 
     virtual void setSize(sf::Vector2f size);
     virtual void setPosition(sf::Vector2f position);
 
-    virtual bool delegateEvent(sf::RenderWindow& window, sf::Event &event);
+    virtual bool delegateEvent(sf::RenderWindow& window, sf::Event &event, sf::View* view);
 
     virtual void onDrawStateChanged(DrawState oldState, DrawState newState) {}
+    virtual void setActivated(bool activated);
+    virtual bool isActivated();
 
     virtual sf::FloatRect globalBounds();
 
@@ -40,6 +42,8 @@ protected:
     sf::FloatRect m_bounds;
     BaseWidget* m_parent;
     std::vector<BaseWidget*> m_children;
+
+    bool m_activated{false};
 
     bool m_drawn{false};
 

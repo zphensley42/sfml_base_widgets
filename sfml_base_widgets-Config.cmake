@@ -35,6 +35,7 @@ add_library(sfml_base_widgets
         ${CMAKE_CURRENT_LIST_DIR}/src/BaseWidget.cc
         ${CMAKE_CURRENT_LIST_DIR}/src/ButtonWidget.cc
         ${CMAKE_CURRENT_LIST_DIR}/src/FontManager.cc
+        ${CMAKE_CURRENT_LIST_DIR}/src/HContainer.cc
 )
 target_include_directories(sfml_base_widgets PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 target_link_libraries(sfml_base_widgets sfml-audio sfml-graphics sfml-window sfml-system)

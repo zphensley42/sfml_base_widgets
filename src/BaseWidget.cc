@@ -3,6 +3,14 @@
 
 namespace sfml { namespace base {
 
+BaseWidget::~BaseWidget() {
+    for(auto& child : m_children) {
+        child->m_parent = nullptr;
+        delete child;
+    }
+    m_children.clear();
+}
+
 void BaseWidget::addChild(BaseWidget *child) {
     m_children.push_back(child);
     child->m_parent = this;
@@ -28,9 +36,9 @@ void BaseWidget::updateState(BaseWidget::DrawState state) {
     onDrawStateChanged(oldState, state);
 }
 
-bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
+bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event, sf::View* view) {
     auto p = sf::Mouse::getPosition(window);
-    auto mousePos = window.mapPixelToCoords({p.x, p.y});
+    auto mousePos = window.mapPixelToCoords({p.x, p.y}, view ? *view : window.getView());
     auto gb = globalBounds();
 
     switch(event.type) {
@@ -44,7 +52,7 @@ bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
                     determineState(
                             FocusManager::instance().isHovered(this),
                             FocusManager::instance().isPressed(this),
-                            false,
+                            m_activated,
                             false
                     );
 
@@ -62,7 +70,7 @@ bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
                     determineState(
                             FocusManager::instance().isHovered(this),
                             FocusManager::instance().isPressed(this),
-                            false,
+                            m_activated,
                             false
                     );
                 }
@@ -83,7 +91,7 @@ bool BaseWidget::delegateEvent(sf::RenderWindow& window, sf::Event &event) {
             determineState(
                     FocusManager::instance().isHovered(this),
                     FocusManager::instance().isPressed(this),
-                    false,
+                    m_activated,
                     false
                     );
             break;
@@ -105,6 +113,20 @@ void BaseWidget::determineState(bool hovered, bool pressed, bool activated, bool
             updateState(hovered ? DrawState::BW_DS_HOVERED : (activated ? DrawState::BW_DS_ACTIVATED : BW_DS_NONE));
         }
     }
+}
+
+void BaseWidget::setActivated(bool activated) {
+    m_activated = activated;
+    determineState(
+            FocusManager::instance().isHovered(this),
+            FocusManager::instance().isPressed(this),
+            m_activated,
+            false
+    );
+}
+
+bool BaseWidget::isActivated() {
+    return m_activated;
 }
 
 FocusManager& FocusManager::instance() {

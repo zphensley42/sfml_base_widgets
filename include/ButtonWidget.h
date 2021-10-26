@@ -18,7 +18,7 @@ public:
     void setText(const std::string &text);
     std::string getText();
     void draw(sf::View* v, sf::RenderWindow &w) override;
-    bool delegateEvent(sf::RenderWindow& window, sf::Event& event) override;
+    bool delegateEvent(sf::RenderWindow& window, sf::Event& event, sf::View* view) override;
     void setClickedListener(std::function<void()> listener);
 
     virtual void setSize(sf::Vector2f size) override;
