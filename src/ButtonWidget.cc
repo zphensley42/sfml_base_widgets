@@ -25,9 +25,9 @@ void ButtonWidget::setBackgroundColors(DrawStateColorMapping background) {
     m_stateBackgroundColors = background;
 }
 
-void ButtonWidget::setText(const std::string &text) {
+void ButtonWidget::setText(const std::string &text, unsigned int size) {
     m_label.setString(text);
-    m_label.setCharacterSize(16);
+    m_label.setCharacterSize(size);
 }
 
 std::string ButtonWidget::getText() {
@@ -115,6 +115,11 @@ void ButtonWidget::setSize(sf::Vector2f size) {
     BaseWidget::setSize(size);
 
     m_drawn = false;
+    reposition();
+}
+
+void ButtonWidget::setPosition(sf::Vector2f position) {
+    BaseWidget::setPosition(position);
     reposition();
 }
 

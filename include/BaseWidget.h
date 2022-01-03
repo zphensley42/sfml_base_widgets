@@ -35,6 +35,7 @@ public:
     virtual sf::FloatRect globalBounds();
 
     void addChild(BaseWidget* child);
+    void clearChildren();
 
     virtual void draw(sf::View* v, sf::RenderWindow &w) {}
 protected:

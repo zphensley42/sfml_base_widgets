@@ -34,6 +34,7 @@ endif (WIN32)
 add_library(sfml_base_widgets
         ${CMAKE_CURRENT_LIST_DIR}/src/BaseWidget.cc
         ${CMAKE_CURRENT_LIST_DIR}/src/ButtonWidget.cc
+        ${CMAKE_CURRENT_LIST_DIR}/src/TextWidget.cc
         ${CMAKE_CURRENT_LIST_DIR}/src/FontManager.cc
         ${CMAKE_CURRENT_LIST_DIR}/src/HContainer.cc
 )

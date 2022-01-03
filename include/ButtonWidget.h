@@ -15,13 +15,14 @@ public:
     float getHeight();
     void setForegroundColors(DrawStateColorMapping foreground);
     void setBackgroundColors(DrawStateColorMapping background);
-    void setText(const std::string &text);
+    void setText(const std::string &text, unsigned int size = 16);
     std::string getText();
     void draw(sf::View* v, sf::RenderWindow &w) override;
     bool delegateEvent(sf::RenderWindow& window, sf::Event& event, sf::View* view) override;
     void setClickedListener(std::function<void()> listener);
 
     virtual void setSize(sf::Vector2f size) override;
+    virtual void setPosition(sf::Vector2f position) override;
 
     void setTextAlign(TextAlign align);
 

@@ -4,16 +4,20 @@
 namespace sfml { namespace base {
 
 BaseWidget::~BaseWidget() {
-    for(auto& child : m_children) {
-        child->m_parent = nullptr;
-        delete child;
-    }
-    m_children.clear();
+    clearChildren();
 }
 
 void BaseWidget::addChild(BaseWidget *child) {
     m_children.push_back(child);
     child->m_parent = this;
+}
+
+void BaseWidget::clearChildren() {
+    for(auto& child : m_children) {
+        child->m_parent = nullptr;
+        delete child;
+    }
+    m_children.clear();
 }
 
 void BaseWidget::setSize(sf::Vector2f size) {

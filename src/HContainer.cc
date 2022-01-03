@@ -37,7 +37,7 @@ void HContainer::layoutChildren() {
         if(runningX > 0) {
             runningX += m_hSpacing;
         }
-        child->setPosition({gb.left + runningX, gb.top});
+        child->setPosition({gb.left + runningX, gb.top + cBG.top});
         runningX += cBG.width;
 
         if(cBG.height > maxH) {
